@@ -1,0 +1,128 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy\n",
+        "print(numpy.__version__)\n",
+        "\n",
+        "!nvidia-smi"
+      ],
+      "metadata": {
+        "id": "1Apv2IhfNqSe",
+        "outputId": "d56e931a-7f3f-400d-8b6a-06ab5402469d",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "2.0.2\n",
+            "Tue Jun 16 11:35:15 2026       \n",
+            "+-----------------------------------------------------------------------------------------+\n",
+            "| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |\n",
+            "+-----------------------------------------+------------------------+----------------------+\n",
+            "| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n",
+            "| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n",
+            "|                                         |                        |               MIG M. |\n",
+            "|=========================================+========================+======================|\n",
+            "|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |\n",
+            "| N/A   37C    P8              9W /   70W |       0MiB /  15360MiB |      0%      Default |\n",
+            "|                                         |                        |                  N/A |\n",
+            "+-----------------------------------------+------------------------+----------------------+\n",
+            "\n",
+            "+-----------------------------------------------------------------------------------------+\n",
+            "| Processes:                                                                              |\n",
+            "|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n",
+            "|        ID   ID                                                               Usage      |\n",
+            "|=========================================================================================|\n",
+            "|  No running processes found                                                             |\n",
+            "+-----------------------------------------------------------------------------------------+\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip uninstall -y cupy cupy-cuda12x\n",
+        "!pip install numpy==1.26.4"
+      ],
+      "metadata": {
+        "id": "bAaGPVzSNzvm",
+        "outputId": "0dc7113c-6ea4-45c4-8fff-a007f142877b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[33mWARNING: Skipping cupy as it is not installed.\u001b[0m\u001b[33m\n",
+            "\u001b[0m\u001b[33mWARNING: Skipping cupy-cuda12x as it is not installed.\u001b[0m\u001b[33m\n",
+            "\u001b[0mRequirement already satisfied: numpy==1.26.4 in /usr/local/lib/python3.12/dist-packages (1.26.4)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "cellView": "form",
+        "id": "VjYy0F2gZIPR"
+      },
+      "outputs": [],
+      "source": [
+        "#@title DeFooocus\n",
+        "#@markdown **Launch the interface DeFocus (Fooocus fork)** | You need to connect with T4/A100/V100\n",
+        "#@markdown ****\n",
+        "#@markdown *Attention!* When working in the interface with the FaceSwap and CPDS controlnet, crashes are possible; it is also recommended to work in *Extreme speed* mode for additional stability. When working with the ImagePrompt and PyraCanny controls, 85% of the work will be stable.\n",
+        "#@markdown ****\n",
+        "\n",
+        "print(\"[DeFooocus] Preparing ...\")\n",
+        "\n",
+        "theme = \"dark\" #@param [\"dark\", \"light\"]\n",
+        "preset = \"deafult\" #@param [\"deafult\", \"realistic\", \"anime\", \"lcm\", \"sai\", \"turbo\", \"lighting\", \"hypersd\", \"playground_v2.5\", \"dpo\", \"spo\", \"sd1.5\"]\n",
+        "advenced_args = \"--share --attention-split --always-high-vram --disable-offload-from-vram --all-in-fp16\" #@param {type: \"string\"}\n",
+        "\n",
+        "if preset != \"deafult\":\n",
+        "  args = f\"{advenced_args} --theme {theme} --preset {preset}\"\n",
+        "else:\n",
+        "  args = f\"{advenced_args} --theme {theme}\"\n",
+        "\n",
+        "!pip install -q pygit2==1.12.2\n",
+        "%cd /content\n",
+        "!git clone https://github.com/ehristoforu/DeFooocus.git\n",
+        "%cd /content/DeFooocus\n",
+        "!pip install -q -r requirements_versions.txt\n",
+        "\n",
+        "print(\"[DeFooocus] Starting ...\")\n",
+        "!python entry_with_update.py $args"
+      ]
+    }
+  ],
+  "metadata": {
+    "accelerator": "GPU",
+    "colab": {
+      "gpuType": "T4",
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
